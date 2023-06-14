@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二進数変換装置</title>
+</head>
+<body>
+    <script>
+        function henkan_16(str = "",  bits = 32){
+            var ans = "";
+            for(var i = 0; i < bits; i += 4){
+                var test = str.substring(i, i+4)
+                switch (test) {
+                    case '1111': ans += 'F'
+                        break;
+                    case '1110': ans += 'E'
+                        break;
+                    case '1101': ans += 'D'
+                        break;
+                    case '1100': ans += 'C'
+                        break;
+                    case '1011': ans += 'B'
+                        break;
+                    case '1010': ans += 'A'
+                        break;
+                    case '1001': ans += '9'
+                        break;
+                    case '1000': ans += '8'
+                        break;
+                    case '0111': ans += '7'
+                        break;
+                    case '0110': ans += '6'
+                        break;
+                    case '0101': ans += '5'
+                        break;
+                    case '0100': ans += '4'
+                        break;
+                    case '0011': ans += '3'
+                        break;
+                    case '0010': ans += '2'
+                        break;
+                    case '0001': ans += '1'
+                        break;
+                    case '0000': ans += '0'
+                        break;
+                    default: ans += "ERROR"
+                        break;
+                }
+            }
+            return ans;
+        }
+        function henkan(){
+            var bits = parseInt(window.prompt("32bitか16bitを選んでください"));
+            while(bits !== 32 && bits !== 16 && bits !== 64){
+                bits = parseInt(window.prompt("もう一度やり直してください(16または32または64を入力してください)"));
+            }
+            var result = window.prompt("変換したい数字を入力してください");
+            var target = parseInt(result);
+            while(target === NaN || target === 0){
+                result = window.prompt("もう一度変換したい数字を入力してください");
+                target = parseInt(result);
+            }
+            var ans = "";
+            var bit = bits
+            if(bit == 16)bit = 32
+            for(var i = 0; i < bit; i++){
+                ans += ((0x80000000 & (target << i)) >> (bit - 1)) * -1;
+            }
+            var text = '';
+            if(bits === 16){
+                text = result + " = 0b" + ans.substring(16) + " = 0x"+ henkan_16(ans, bit).substring(4)
+            }else if(bits === 32){
+                text = result + " = 0b" + ans + " = 0x"+ henkan_16(ans, bit)
+            }else{
+                text = result + " = 0b" + ans + " = 0x"+ henkan_16(ans, bit)
+            }
+            document.getElementById('result').textContent = text;
+        }
+    </script>
+    <a href="Javascript:henkan()">起動</a>
+    <div id="result"></div>
+</body>
+</html>
